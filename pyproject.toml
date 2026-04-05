@@ -1,0 +1,26 @@
+[project]
+name = "kunjdb"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = ["ruff>=0.15.9"]
+
+
+[tool.ruff]
+line-length = 88
+
+exclude = [".git", ".venv", "venv", "env", "migrations"]
+
+[tool.ruff.lint]
+select = [
+  "E",  # pycodestyle errors
+  "W",  # pycodestyle warnings
+  "F",  # pyflakes
+  "I",  # isort
+  "DJ", # flake8-django
+]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
