@@ -5,12 +5,6 @@ import warnings
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
-import typer
-
-print(typer.__file__)
-
-print(os.__file__)
-
 __all__ = ("Storage", "JSONStorage", "MemoryStorage")
 
 
@@ -43,7 +37,6 @@ class JSONStorage(Storage):
     def __init__(
         self, path: str, create_dirs=False, encoding=None, access_mode="r+", **kwargs
     ):
-
         super().__init__()
 
         self._mode = access_mode
@@ -54,7 +47,6 @@ class JSONStorage(Storage):
                 "Using an `access_mode` other than 'r', 'rb', 'r+' "
                 "or 'rb+' can cause data loss or corruption"
             )
-
         if any([character in self._mode for character in ("+", "w", "a")]):
             touch(path, create_dirs=create_dirs)
 
@@ -71,21 +63,19 @@ class JSONStorage(Storage):
             return None
         else:
             self._handle.seek(0)
-
             return json.load(self._handle)
 
     def write(self, data: Dict[str, Dict[str, Any]]):
-        self._handle.seek(0)
 
+        self._handle.seek(0)
         serialized = json.dumps(data, **self.kwargs)
 
         try:
             self._handle.write(serialized)
         except io.UnsupportedOperation:
             raise IOError(
-                'Cannot write to the database. Access mode is "{0}"'.format(self._mode)
+                f'Cannot write to the database. Access mode is "{self._mode}"'
             )
-
         self._handle.flush()
         os.fsync(self._handle.fileno())
 
@@ -93,4 +83,12 @@ class JSONStorage(Storage):
 
 
 class MemoryStorage(Storage):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.memory = None
+
+    def read(self) -> Optional[Dict[str, Dict[str, Any]]]:
+        return self.memory
+
+    def write(self, data: Dict[str, Dict[str, Any]]):
+        self.memory = data
