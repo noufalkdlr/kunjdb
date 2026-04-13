@@ -9,6 +9,11 @@ class TinyDB:
     def __init__(self, *args, **kwargs) -> None:
         storage = kwargs.pop("storage", self.default_storage_class)
         self._storage = storage(*args, **kwargs)
+        self._tables = {}
 
-    def table(self, **kwargs):
-        self.table_class(**kwargs)
+    def table(self, name: str, **kwargs):
+        if not name in self._tables:
+            table = self.table_class(self._storage, name, **kwargs)
+            self._tables[name]= table
+        
+        return self._tables[name]
