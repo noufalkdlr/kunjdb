@@ -1,16 +1,10 @@
-# from tinydb.database import TinyDB
+from tinydb.database import TinyDB
 
-# db = TinyDB('data.json')
-# person = db.table('person')
-
-# print(type(person))
-
-from typing import Dict
-
-data = {'name':"noufal"}
-
-def name(data:Dict):
-    return data['name']
+db = TinyDB('data.json', indent =4)
+person = db.table('person')
 
 
-print(name(data))
+
+
+person.insert({"name":"noufal"})
+
